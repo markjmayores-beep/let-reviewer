@@ -5,8 +5,6 @@ import { Trophy, RefreshCw, Home, TrendingUp, CheckCircle, XCircle } from 'lucid
 import type { Question, ExamMode } from '@/types'
 import { formatPercent } from '@/lib/utils'
 import { cn } from '@/lib/utils'
-import AdBanner from '@/components/shared/AdBanner'
-
 interface ExamResultsProps {
   score: number
   total: number
@@ -158,11 +156,6 @@ export default function ExamResults({
         </div>
       </div>
 
-      {/* Ad after results */}
-      <AdBanner
-        slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_BANNER ?? ''}
-        className="mt-6"
-      />
     </div>
   )
 }

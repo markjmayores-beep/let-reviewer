@@ -49,7 +49,7 @@ export default function PremiumPage() {
           .gt('ends_at', new Date().toISOString())
           .order('ends_at', { ascending: false })
           .limit(1)
-          .single(),
+          .maybeSingle(),
       ])
 
       if (sub?.ends_at) {

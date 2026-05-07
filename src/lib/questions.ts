@@ -82,7 +82,7 @@ export async function fetchDailyChallenge(date: string) {
     .from('daily_challenges')
     .select('*')
     .eq('challenge_date', date)
-    .single()
+    .maybeSingle()
 
   if (!challenge) return null
 

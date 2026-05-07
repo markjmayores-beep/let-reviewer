@@ -22,7 +22,7 @@ export const getAccessInfo = cache(async (userId: string): Promise<AccessInfo> =
     .gt('ends_at', new Date().toISOString())
     .order('ends_at', { ascending: false })
     .limit(1)
-    .single()
+    .maybeSingle()
 
   if (sub?.ends_at) {
     return { status: 'active', endsAt: new Date(sub.ends_at) }
@@ -33,7 +33,7 @@ export const getAccessInfo = cache(async (userId: string): Promise<AccessInfo> =
     .from('profiles')
     .select('trial_started_at')
     .eq('id', userId)
-    .single()
+    .maybeSingle()
 
   if (profile?.trial_started_at) {
     const trialEnd = new Date(
