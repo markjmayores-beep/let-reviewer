@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { createPaymentLink, PLANS } from '@/lib/paymongo'
+import { createPaymentLink, PLANS, type SubscriptionPlan } from '@/lib/paymongo'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
@@ -11,7 +11,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { plan } = await request.json() as { plan: 'monthly' | 'yearly' }
+    const { plan } = await request.json() as { plan: SubscriptionPlan }
 
     if (!plan || !PLANS[plan]) {
       return NextResponse.json({ error: 'Invalid plan' }, { status: 400 })
