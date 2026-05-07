@@ -36,6 +36,15 @@ export default function QuestionCard({
 
   async function handleReport() {
     setReported(true)
+    try {
+      await fetch('/api/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ questionId: question.id, reason: 'incorrect', details: '' }),
+      })
+    } catch {
+      // Non-critical
+    }
     toast.success('Question reported. Thank you!')
   }
 
