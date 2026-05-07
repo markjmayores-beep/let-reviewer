@@ -1,17 +1,37 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
+import { createHmac } from 'crypto'
 
 // PayMongo webhook — called when payment is completed
 // Set webhook URL in PayMongo dashboard: https://your-domain.com/api/subscription/webhook
+
+function verifyPayMongoSignature(body: string, signatureHeader: string | null, secret: string): boolean {
+  if (!signatureHeader || !secret) return false
+  try {
+    // PayMongo signature format: t=<timestamp>,te=<test_sig>,li=<live_sig>
+    const parts = Object.fromEntries(signatureHeader.split(',').map(p => p.split('=')))
+    const timestamp = parts['t']
+    const liveSig = parts['li'] ?? parts['te']
+    if (!timestamp || !liveSig) return false
+    const payload = `${timestamp}.${body}`
+    const expected = createHmac('sha256', secret).update(payload).digest('hex')
+    return expected === liveSig
+  } catch {
+    return false
+  }
+}
 
 export async function POST(request: Request) {
   try {
     const body = await request.text()
     const signature = request.headers.get('paymongo-signature')
+    const webhookSecret = process.env.PAYMONGO_WEBHOOK_SECRET
 
-    // Verify webhook signature (recommended for production)
-    // const webhookSecret = process.env.PAYMONGO_WEBHOOK_SECRET
-    // TODO: implement HMAC verification
+    // Verify webhook signature if secret is configured
+    if (webhookSecret && !verifyPayMongoSignature(body, signature, webhookSecret)) {
+      console.warn('[webhook] Invalid signature')
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
+    }
 
     const event = JSON.parse(body)
     const eventType = event.data?.attributes?.type
