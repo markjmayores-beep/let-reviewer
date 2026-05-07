@@ -2,7 +2,6 @@
 
 INSERT INTO questions (subject, topic, difficulty, question_text, choices, correct_answer, explanation, exam_type) VALUES
 
--- GENERAL EDUCATION: ENGLISH (201-260)
 ('General Education','English - Grammar','easy','Which sentence has correct subject-verb agreement?','[{"key":"A","text":"The group of students are noisy."},{"key":"B","text":"Each of the boys have a pencil."},{"key":"C","text":"Neither of them is ready."},{"key":"D","text":"The news are alarming."}]','C','Neither/either takes a singular verb. "Neither of them is ready" is correct.','both'),
 
 ('General Education','English - Grammar','medium','Choose the sentence in the passive voice.','[{"key":"A","text":"Maria wrote the letter."},{"key":"B","text":"The letter was written by Maria."},{"key":"C","text":"Maria is writing the letter."},{"key":"D","text":"Maria will write the letter."}]','B','Passive voice uses "to be" + past participle. "The letter was written by Maria" is passive.','both'),
@@ -93,7 +92,6 @@ INSERT INTO questions (subject, topic, difficulty, question_text, choices, corre
 
 ('General Education','English - Grammar','easy','The prefix "un-" in "unhappy" means:','[{"key":"A","text":"Very"},{"key":"B","text":"Not"},{"key":"C","text":"Again"},{"key":"D","text":"Before"}]','B','The prefix "un-" negates the root word: unhappy = not happy, unlikely = not likely.','both'),
 
--- GENERAL EDUCATION: MATHEMATICS (261-320)
 ('General Education','Mathematics - Arithmetic','easy','What is 15% of 200?','[{"key":"A","text":"25"},{"key":"B","text":"30"},{"key":"C","text":"35"},{"key":"D","text":"40"}]','B','15% of 200 = 0.15 × 200 = 30.','both'),
 
 ('General Education','Mathematics - Arithmetic','easy','What is the value of 3² + 4²?','[{"key":"A","text":"25"},{"key":"B","text":"14"},{"key":"C","text":"49"},{"key":"D","text":"7"}]','A','3² + 4² = 9 + 16 = 25. (Note: This also illustrates the Pythagorean triple 3-4-5.)','both'),
@@ -176,7 +174,6 @@ INSERT INTO questions (subject, topic, difficulty, question_text, choices, corre
 
 ('General Education','Mathematics - Statistics','medium','Two dice are rolled. What is the probability of getting a sum of 7?','[{"key":"A","text":"1/6"},{"key":"B","text":"1/9"},{"key":"C","text":"5/36"},{"key":"D","text":"7/36"}]','A','Favorable outcomes for sum 7: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1) = 6. Total = 36. P = 6/36 = 1/6.','both'),
 
--- GENERAL EDUCATION: SCIENCE (321-380)
 ('General Education','Science - Biology','easy','The basic unit of life is the:','[{"key":"A","text":"Tissue"},{"key":"B","text":"Organ"},{"key":"C","text":"Cell"},{"key":"D","text":"Atom"}]','C','The cell is the smallest structural and functional unit of all living organisms.','both'),
 
 ('General Education','Science - Biology','medium','Photosynthesis converts:','[{"key":"A","text":"Oxygen and water into glucose and carbon dioxide"},{"key":"B","text":"Carbon dioxide and water into glucose and oxygen"},{"key":"C","text":"Glucose and oxygen into carbon dioxide and water"},{"key":"D","text":"Nitrogen and water into proteins"}]','B','Photosynthesis: 6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂. Plants convert CO₂ and H₂O into glucose and oxygen.','both'),
@@ -239,7 +236,6 @@ INSERT INTO questions (subject, topic, difficulty, question_text, choices, corre
 
 ('General Education','Science - Biology','medium','The role of the liver in digestion includes:','[{"key":"A","text":"Producing insulin for blood sugar regulation"},{"key":"B","text":"Producing bile to emulsify fats"},{"key":"C","text":"Absorbing water from digested food"},{"key":"D","text":"Producing hydrochloric acid for protein digestion"}]','B','The liver produces bile, which is stored in the gallbladder and released into the small intestine to emulsify (break up) fats.','both'),
 
--- SOCIAL STUDIES (381-400)
 ('General Education','Social Studies - Philippine History','easy','José Rizal was executed at Bagumbayan (now Luneta) on:','[{"key":"A","text":"June 12, 1898"},{"key":"B","text":"December 30, 1896"},{"key":"C","text":"August 23, 1896"},{"key":"D","text":"September 24, 1872"}]','B','Rizal was executed by firing squad on December 30, 1896, now commemorated as Rizal Day.','both'),
 
 ('General Education','Social Studies - Philippine History','easy','The Philippine Declaration of Independence was proclaimed on:','[{"key":"A","text":"June 12, 1898"},{"key":"B","text":"July 4, 1946"},{"key":"C","text":"February 25, 1986"},{"key":"D","text":"August 23, 1896"}]','A','Philippine Independence was declared on June 12, 1898 in Kawit, Cavite by General Emilio Aguinaldo.','both'),

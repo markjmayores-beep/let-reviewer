@@ -3,7 +3,6 @@
 
 INSERT INTO questions (subject, topic, difficulty, question_text, choices, correct_answer, explanation, exam_type) VALUES
 
--- CHILD AND ADOLESCENT DEVELOPMENT (1-40)
 ('Professional Education','Child and Adolescent Development','medium','According to Piaget, which stage is characterized by abstract thinking and hypothetical reasoning?','[{"key":"A","text":"Sensorimotor"},{"key":"B","text":"Preoperational"},{"key":"C","text":"Concrete Operational"},{"key":"D","text":"Formal Operational"}]','D','The Formal Operational stage (12+ years) is marked by abstract thought, hypothetical reasoning, and logical deduction.','both'),
 
 ('Professional Education','Child and Adolescent Development','easy','Vygotsky''s Zone of Proximal Development (ZPD) refers to:','[{"key":"A","text":"Tasks a child can do independently"},{"key":"B","text":"Tasks too difficult even with help"},{"key":"C","text":"The gap between what a child can do alone and with guidance"},{"key":"D","text":"The child''s comfort zone in learning"}]','C','ZPD is the distance between actual development (independent) and potential development (with skilled guidance).','both'),
@@ -86,7 +85,6 @@ INSERT INTO questions (subject, topic, difficulty, question_text, choices, corre
 
 ('Professional Education','Child and Adolescent Development','easy','A child who begins to use symbols (words, images) to represent objects is in Piaget''s:','[{"key":"A","text":"Sensorimotor stage"},{"key":"B","text":"Preoperational stage"},{"key":"C","text":"Concrete Operational stage"},{"key":"D","text":"Formal Operational stage"}]','B','Symbolic function — using words and images to represent objects — emerges in the Preoperational stage (2–7 years).','both'),
 
--- FACILITATING LEARNING (41-80)
 ('Professional Education','Facilitating Learning','easy','Pavlov''s classical conditioning involves learning through:','[{"key":"A","text":"Reward and punishment"},{"key":"B","text":"Association between a neutral stimulus and a natural response"},{"key":"C","text":"Observation and imitation"},{"key":"D","text":"Trial and error"}]','B','Classical conditioning pairs a neutral stimulus with an unconditioned stimulus to elicit a conditioned response.','both'),
 
 ('Professional Education','Facilitating Learning','medium','Skinner''s operant conditioning is based on:','[{"key":"A","text":"Association of stimuli"},{"key":"B","text":"Consequences (reinforcement and punishment) shaping behavior"},{"key":"C","text":"Innate biological drives"},{"key":"D","text":"Social observation"}]','B','Operant conditioning holds that behaviors followed by positive consequences are strengthened; those followed by negative consequences are weakened.','both'),
@@ -167,7 +165,6 @@ INSERT INTO questions (subject, topic, difficulty, question_text, choices, corre
 
 ('Professional Education','Facilitating Learning','easy','Which theorist is associated with the "hierarchy of needs" applied to motivation in education?','[{"key":"A","text":"B.F. Skinner"},{"key":"B","text":"Abraham Maslow"},{"key":"C","text":"Carl Rogers"},{"key":"D","text":"Albert Bandura"}]','B','Maslow''s hierarchy of needs (physiological → safety → love → esteem → self-actualization) is widely applied to classroom motivation.','both'),
 
--- ASSESSMENT OF LEARNING (81-115)
 ('Professional Education','Assessment of Learning','easy','Formative assessment is primarily used to:','[{"key":"A","text":"Assign final grades"},{"key":"B","text":"Monitor student learning and provide feedback during instruction"},{"key":"C","text":"Rank students at the end of a term"},{"key":"D","text":"Select students for advanced programs"}]','B','Formative assessment is ongoing assessment during learning to guide instruction and provide feedback.','both'),
 
 ('Professional Education','Assessment of Learning','easy','Summative assessment is used to:','[{"key":"A","text":"Diagnose learning difficulties before instruction"},{"key":"B","text":"Provide feedback during the learning process"},{"key":"C","text":"Evaluate student achievement at the end of a unit or course"},{"key":"D","text":"Group students for instruction"}]','C','Summative assessment evaluates what students have learned at the end of an instructional period (e.g., final exams, unit tests).','both'),
@@ -218,7 +215,6 @@ INSERT INTO questions (subject, topic, difficulty, question_text, choices, corre
 
 ('Professional Education','Assessment of Learning','medium','Peer assessment in the classroom:','[{"key":"A","text":"Replaces the teacher''s grading responsibility"},{"key":"B","text":"Develops evaluative skills and promotes collaborative learning"},{"key":"C","text":"Is unreliable and should be avoided"},{"key":"D","text":"Only works for older students"}]','B','Peer assessment enhances critical thinking, develops evaluation skills, and encourages students to learn from each other.','both'),
 
--- CURRICULUM DEVELOPMENT (116-145)
 ('Professional Education','Curriculum Development','medium','Tyler''s Rationale (1949) begins curriculum development with:','[{"key":"A","text":"Selecting learning experiences"},{"key":"B","text":"Determining educational purposes"},{"key":"C","text":"Organizing learning experiences"},{"key":"D","text":"Evaluating outcomes"}]','B','Tyler''s four-step model starts with identifying educational purposes/objectives, then selecting experiences, organizing, and evaluating.','both'),
 
 ('Professional Education','Curriculum Development','medium','The hidden curriculum refers to:','[{"key":"A","text":"Secret government education plans"},{"key":"B","text":"Unwritten, informal lessons students learn in school"},{"key":"C","text":"Advanced curriculum for gifted students"},{"key":"D","text":"Online curriculum resources"}]','B','The hidden curriculum encompasses implicit messages, values, and norms students learn through the school culture and environment.','both'),
@@ -249,7 +245,6 @@ INSERT INTO questions (subject, topic, difficulty, question_text, choices, corre
 
 ('Professional Education','Curriculum Development','medium','Subject-centered curriculum design focuses on:','[{"key":"A","text":"The interests and needs of learners"},{"key":"B","text":"Organized academic disciplines and content"},{"key":"C","text":"Social problems and current issues"},{"key":"D","text":"Individual learning plans"}]','B','Subject-centered design organizes curriculum around disciplines (Math, Science, English) prioritizing content mastery.','both'),
 
--- TEACHING PROFESSION (146-170)
 ('Professional Education','The Teaching Profession','easy','Republic Act 7836 is known as the:','[{"key":"A","text":"Magna Carta for Public School Teachers"},{"key":"B","text":"Philippine Teachers Professionalization Act of 1994"},{"key":"C","text":"K-12 Basic Education Act"},{"key":"D","text":"CHED Act"}]','B','RA 7836 professionalizes teaching in the Philippines and created the Licensure Examination for Teachers (LET).','both'),
 
 ('Professional Education','The Teaching Profession','medium','Under the Code of Ethics for Professional Teachers, the teacher''s primary obligation is to:','[{"key":"A","text":"The school administration"},{"key":"B","text":"The student and their best interest"},{"key":"C","text":"Parents only"},{"key":"D","text":"The government"}]','B','Article IV of the Code states that a teacher''s first concern is the learner''s growth and development.','both'),
@@ -276,7 +271,6 @@ INSERT INTO questions (subject, topic, difficulty, question_text, choices, corre
 
 ('Professional Education','The Teaching Profession','medium','Republic Act 9293 amends RA 7836 by:','[{"key":"A","text":"Removing the LET requirement"},{"key":"B","text":"Allowing graduates of non-education courses to teach after completing 18 professional education units and passing the LET"},{"key":"C","text":"Creating TESDA"},{"key":"D","text":"Establishing the K-12 curriculum"}]','B','RA 9293 opened teaching to non-education graduates who complete 18 units of professional education subjects and pass the LET.','both'),
 
--- PRINCIPLES OF TEACHING (171-200)
 ('Professional Education','Principles of Teaching','medium','The direct instruction model is characterized by:','[{"key":"A","text":"Student-led exploration without teacher guidance"},{"key":"B","text":"Explicit teacher modeling, guided practice, and independent practice"},{"key":"C","text":"Purely student discovery"},{"key":"D","text":"No feedback to students"}]','B','Direct instruction involves clear learning objectives, teacher modeling, guided practice with feedback, and independent application.','both'),
 
 ('Professional Education','Principles of Teaching','easy','A well-written learning objective should be:','[{"key":"A","text":"Vague to allow student interpretation"},{"key":"B","text":"Specific, measurable, and student-centered"},{"key":"C","text":"Based only on teacher preferences"},{"key":"D","text":"Focused exclusively on content coverage"}]','B','Good objectives (SMART) are specific, measurable, achievable, relevant, and time-bound — stated in terms of student performance.','both'),

@@ -2,7 +2,6 @@
 
 INSERT INTO questions (subject, topic, difficulty, question_text, choices, correct_answer, explanation, exam_type) VALUES
 
--- FILIPINO (401-450)
 ('General Education','Filipino - Gramatika','easy','Alin ang tamang gamit ng pang-uri?','[{"key":"A","text":"Mabilis tumakbo si Pedro."},{"key":"B","text":"Si Pedro ay mabilis na mananakbo."},{"key":"C","text":"Tumakbo nang mabilis si Pedro."},{"key":"D","text":"Mabilis si Pedro na tumakbo."}]','C','Ang pang-uri ay nagpapaliwanag sa katangian ng pangngalan o panghalip. Sa "Tumakbo nang mabilis si Pedro," ginagamit ang pang-uri na "mabilis" bilang pang-abay upang ilarawan ang pandiwa.','both'),
 
 ('General Education','Filipino - Gramatika','medium','Ang salitang "umalis" ay isang halimbawa ng pandiwang:','[{"key":"A","text":"Palipat"},{"key":"B","text":"Katawanin"},{"key":"C","text":"Di-palipat (intransitive)"},{"key":"D","text":"Balintiyak"}]','C','Ang di-palipat na pandiwa ay walang tuwirang layon. Ang "umalis" ay nagpapahayag ng kilos nang walang tinatanggap na layon.','both'),
@@ -53,7 +52,6 @@ INSERT INTO questions (subject, topic, difficulty, question_text, choices, corre
 
 ('General Education','Filipino - Gramatika','medium','Ang hulapi na "-an" sa salitang "tirahan" ay nagpapahiwatig ng:','[{"key":"A","text":"Kilos"},{"key":"B","text":"Lugar"},{"key":"C","text":"Katangian"},{"key":"D","text":"Tagaganap"}]','B','Ang hulapi na "-an" ay kadalasang nagbibigay ng kahulugang lugar: tirahan (lugar ng tirahan), lutuan (lugar ng pagluluto).','both'),
 
--- ADDITIONAL PROFESSIONAL EDUCATION (451-500)
 ('Professional Education','Educational Technology','medium','ICT integration in the classroom aims to:','[{"key":"A","text":"Replace teachers completely"},{"key":"B","text":"Enhance teaching and learning through technology tools"},{"key":"C","text":"Reduce school expenses"},{"key":"D","text":"Entertain students during free time"}]','B','ICT integration uses technology as a tool to enhance instruction, engagement, and learning outcomes — not to replace teachers.','both'),
 
 ('Professional Education','Educational Technology','medium','The SAMR model (Substitution, Augmentation, Modification, Redefinition) describes:','[{"key":"A","text":"Student behavior management levels"},{"key":"B","text":"Levels of technology integration in education"},{"key":"C","text":"Assessment rubric levels"},{"key":"D","text":"Curriculum development stages"}]','B','SAMR describes how technology transforms learning: from substitution (same task, tech tool) to redefinition (tasks impossible without tech).','both'),
