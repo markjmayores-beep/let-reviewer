@@ -21,11 +21,10 @@ const MAJORS_ELEMENTARY = [
 
 export default function SettingsPage() {
   const supabase = createClient()
-  const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [profile, setProfile] = useState({
     full_name: '',
-    exam_type: 'elementary',
+    exam_type: '',
     major: '',
     target_exam_date: '',
   })
@@ -47,7 +46,6 @@ export default function SettingsPage() {
           target_exam_date: data.target_exam_date ?? '',
         })
       }
-      setLoading(false)
     }
     load()
   }, [])
@@ -55,15 +53,16 @@ export default function SettingsPage() {
   async function handleSave() {
     setSaving(true)
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
+    if (!user) { setSaving(false); return }
 
     const { error } = await supabase
       .from('profiles')
       .update({
         full_name: profile.full_name,
-        exam_type: profile.exam_type,
-        major: profile.major,
+        exam_type: profile.exam_type || 'elementary',
+        major: profile.major || null,
         target_exam_date: profile.target_exam_date || null,
+        onboarding_done: true,
       })
       .eq('id', user.id)
 
@@ -81,17 +80,6 @@ export default function SettingsPage() {
     ? Math.ceil((new Date(profile.target_exam_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
     : null
 
-  if (loading) {
-    return (
-      <div className="max-w-xl mx-auto px-4 py-8 animate-pulse">
-        <div className="h-8 w-32 bg-slate-200 rounded-xl mb-8" />
-        <div className="space-y-4">
-          {[...Array(4)].map((_, i) => <div key={i} className="h-16 bg-slate-100 rounded-xl" />)}
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="max-w-xl mx-auto px-4 sm:px-6 py-8">
       <div className="flex items-center gap-3 mb-8">
@@ -106,22 +94,7 @@ export default function SettingsPage() {
 
       <div className="space-y-5">
 
-        {/* Name */}
-        <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
-          <label className="block text-sm font-semibold text-slate-700 mb-2">
-            <GraduationCap className="w-4 h-4 inline mr-1.5 text-indigo-500" />
-            Full Name
-          </label>
-          <input
-            type="text"
-            value={profile.full_name}
-            onChange={e => setProfile(p => ({ ...p, full_name: e.target.value }))}
-            className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            placeholder="Your full name"
-          />
-        </div>
-
-        {/* Exam Type */}
+        {/* LET Track — shown first so it's the first thing users see */}
         <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
           <label className="block text-sm font-semibold text-slate-700 mb-3">
             <BookOpen className="w-4 h-4 inline mr-1.5 text-indigo-500" />
@@ -131,6 +104,7 @@ export default function SettingsPage() {
             {EXAM_TYPES.map(t => (
               <button
                 key={t.value}
+                type="button"
                 onClick={() => setProfile(p => ({ ...p, exam_type: t.value, major: '' }))}
                 className={`py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-colors ${
                   profile.exam_type === t.value
@@ -147,7 +121,8 @@ export default function SettingsPage() {
         {/* Major */}
         <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
           <label className="block text-sm font-semibold text-slate-700 mb-2">
-            Major / Specialization
+            Major / Specialization{' '}
+            <span className="text-slate-400 font-normal">(optional)</span>
           </label>
           <select
             value={profile.major}
@@ -159,6 +134,21 @@ export default function SettingsPage() {
               <option key={m} value={m}>{m}</option>
             ))}
           </select>
+        </div>
+
+        {/* Name */}
+        <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+          <label className="block text-sm font-semibold text-slate-700 mb-2">
+            <GraduationCap className="w-4 h-4 inline mr-1.5 text-indigo-500" />
+            Full Name
+          </label>
+          <input
+            type="text"
+            value={profile.full_name}
+            onChange={e => setProfile(p => ({ ...p, full_name: e.target.value }))}
+            className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="Your full name"
+          />
         </div>
 
         {/* Exam Date */}
@@ -196,12 +186,12 @@ export default function SettingsPage() {
               {daysUntilExam <= 0
                 ? 'Your exam date has passed. Update it!'
                 : daysUntilExam === 1
-                ? '⚡ Exam is TOMORROW! You got this!'
+                ? 'Exam is TOMORROW! You got this!'
                 : daysUntilExam <= 7
-                ? `⚡ ${daysUntilExam} days left — final stretch!`
+                ? `${daysUntilExam} days left — final stretch!`
                 : daysUntilExam <= 30
-                ? `📅 ${daysUntilExam} days until your exam — keep reviewing!`
-                : `📅 ${daysUntilExam} days until your exam — great, stay consistent!`}
+                ? `${daysUntilExam} days until your exam — keep reviewing!`
+                : `${daysUntilExam} days until your exam — great, stay consistent!`}
             </div>
           )}
         </div>
