@@ -1,11 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Sidebar from '@/components/shared/Sidebar'
+import PWAInstallPrompt from '@/components/shared/PWAInstallPrompt'
 import { Menu } from 'lucide-react'
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {})
+    }
+  }, [])
 
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden">
@@ -43,6 +50,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {/* Scrollable content area */}
         <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
+      <PWAInstallPrompt />
     </div>
   )
 }

@@ -15,6 +15,7 @@ import {
   Target,
   LogOut,
   X,
+  Settings,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
@@ -33,6 +34,7 @@ const navItems = [
   { href: '/bookmarks', icon: Bookmark, label: 'Bookmarks' },
   { href: '/leaderboard', icon: Trophy, label: 'Leaderboard' },
   { href: '/premium', icon: Crown, label: 'Go Premium' },
+  { href: '/settings', icon: Settings, label: 'Settings' },
 ]
 
 interface SidebarProps {
