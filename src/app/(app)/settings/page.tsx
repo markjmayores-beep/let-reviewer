@@ -163,10 +163,22 @@ export default function SettingsPage() {
 
         {/* Exam Date */}
         <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
-          <label className="block text-sm font-semibold text-slate-700 mb-2">
-            <Calendar className="w-4 h-4 inline mr-1.5 text-indigo-500" />
-            Target LET Exam Date
-          </label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="text-sm font-semibold text-slate-700 flex items-center gap-1.5">
+              <Calendar className="w-4 h-4 text-indigo-500" />
+              Target LET Exam Date{' '}
+              <span className="text-slate-400 font-normal">(optional)</span>
+            </label>
+            {profile.target_exam_date && (
+              <button
+                type="button"
+                onClick={() => setProfile(p => ({ ...p, target_exam_date: '' }))}
+                className="text-xs text-slate-400 hover:text-red-500 underline transition-colors"
+              >
+                Clear date
+              </button>
+            )}
+          </div>
           <input
             type="date"
             value={profile.target_exam_date}

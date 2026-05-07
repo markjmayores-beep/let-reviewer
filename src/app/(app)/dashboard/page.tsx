@@ -41,6 +41,8 @@ export default async function DashboardPage() {
   ])
 
   const profile = profileRes.data
+  if (!profile?.onboarding_done) redirect('/onboarding')
+
   const streak = streakRes.data
   const weekAttempts = attemptsRes.data ?? []
   const recentSessions = sessionsRes.data ?? []
