@@ -5,7 +5,7 @@
 export type ExamType = 'elementary' | 'secondary' | 'both'
 export type Difficulty = 'easy' | 'medium' | 'hard'
 export type ExamMode = 'quick' | 'timed' | 'mock' | 'survival' | 'daily' | 'mastery'
-export type SubscriptionPlan = 'monthly' | 'yearly'
+export type SubscriptionPlan = 'weekly' | 'monthly'
 export type SubscriptionStatus = 'active' | 'cancelled' | 'expired' | 'pending'
 
 export interface Choice {
@@ -169,15 +169,6 @@ export interface ExamResult {
   passed: boolean
   timeTaken: number
   subjectBreakdown: SubjectStats[]
-}
-
-// ── Ad System ─────────────────────────────────────────────────
-
-export interface AdGateState {
-  questionsAnswered: number
-  adRequired: boolean
-  adWatched: boolean
-  unlockedBatch: number
 }
 
 // ── Subjects / Topics ─────────────────────────────────────────

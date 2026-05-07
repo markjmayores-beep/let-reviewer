@@ -7,22 +7,24 @@ const PAYMONGO_BASE = 'https://api.paymongo.com/v1'
 const PAYMONGO_SECRET = process.env.PAYMONGO_SECRET_KEY!
 
 export const PLANS = {
+  weekly: {
+    name: 'Weekly Premium',
+    amount: 9900, // ₱99.00 in centavos
+    description: 'Full access for 7 days — No limits, all exam modes',
+    interval: 7,
+  },
   monthly: {
     name: 'Monthly Premium',
-    amount: 19900, // ₱199.00 in centavos
-    description: 'Full access for 1 month — No ads, unlimited review, all exam modes',
+    amount: 29900, // ₱299.00 in centavos
+    description: 'Full access for 30 days — Best value!',
     interval: 30,
-  },
-  yearly: {
-    name: 'Yearly Premium',
-    amount: 99900, // ₱999.00 in centavos
-    description: 'Full access for 1 year — Best value! Save ₱1,389 vs monthly',
-    interval: 365,
   },
 }
 
+export type SubscriptionPlan = keyof typeof PLANS
+
 interface CreatePaymentLinkParams {
-  plan: 'monthly' | 'yearly'
+  plan: SubscriptionPlan
   userId: string
   userEmail: string
   userName: string

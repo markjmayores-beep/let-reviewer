@@ -4,8 +4,6 @@ export const dynamic = 'force-dynamic'
 import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import QuestionCard from '@/components/exam/QuestionCard'
-import RewardedAdGate from '@/components/shared/RewardedAdGate'
-import AdBanner from '@/components/shared/AdBanner'
 import ExamResults from '@/components/exam/ExamResults'
 import { shuffleArray } from '@/lib/utils'
 import type { Question } from '@/types'
@@ -22,22 +20,12 @@ export default function QuickReviewPage() {
   const [sessionDone, setSessionDone] = useState(false)
   const [bookmarks, setBookmarks] = useState<Set<string>>(new Set())
   const [sessionId] = useState(() => crypto.randomUUID())
-  const [isPremium, setIsPremium] = useState(false)
-  const [questionsAnsweredTotal, setQuestionsAnsweredTotal] = useState(0)
   const supabase = createClient()
 
   const loadQuestions = useCallback(async () => {
     setLoading(true)
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
-
-    // Check premium status
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('is_premium')
-      .eq('id', user.id)
-      .single()
-    setIsPremium(profile?.is_premium ?? false)
 
     const { data } = await supabase
       .from('questions')
@@ -74,9 +62,6 @@ export default function QuickReviewPage() {
   }
 
   async function handleNext() {
-    const newTotal = questionsAnsweredTotal + 1
-    setQuestionsAnsweredTotal(newTotal)
-
     if (currentIndex + 1 >= questions.length) {
       // Save session
       const { data: { user } } = await supabase.auth.getUser()
@@ -170,14 +155,6 @@ export default function QuickReviewPage() {
         </div>
       </div>
 
-      {/* Ad banner (top, only for free users) */}
-      {!isPremium && (
-        <AdBanner
-          slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_BANNER ?? ''}
-          className="mb-6"
-        />
-      )}
-
       {/* Question */}
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
         <QuestionCard
@@ -192,13 +169,6 @@ export default function QuickReviewPage() {
           isBookmarked={bookmarks.has(currentQuestion.id)}
         />
       </div>
-
-      {/* Rewarded ad gate every 5 questions */}
-      <RewardedAdGate
-        questionsAnswered={questionsAnsweredTotal}
-        onUnlock={() => {}}
-        isPremium={isPremium}
-      />
 
       {/* New session button */}
       <div className="mt-4 text-center">

@@ -11,10 +11,11 @@ import {
   Trophy,
   ArrowRight,
   Brain,
-  Zap,
+  Lock,
 } from 'lucide-react'
 import { formatPercent, getDaysUntilExam, getReadinessLabel } from '@/lib/utils'
 import { fetchWeakTopics } from '@/lib/questions'
+import { getAccessInfo } from '@/lib/subscription'
 export const dynamic = 'force-dynamic'
 
 export default async function DashboardPage() {
@@ -22,8 +23,8 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Fetch profile, streak, and recent stats in parallel
-  const [profileRes, streakRes, attemptsRes, sessionsRes] = await Promise.all([
+  // Fetch profile, streak, recent stats, and access info in parallel
+  const [profileRes, streakRes, attemptsRes, sessionsRes, accessInfo] = await Promise.all([
     supabase.from('profiles').select('*').eq('id', user.id).single(),
     supabase.from('streaks').select('*').eq('user_id', user.id).single(),
     supabase
@@ -38,6 +39,7 @@ export default async function DashboardPage() {
       .eq('is_completed', true)
       .order('completed_at', { ascending: false })
       .limit(5),
+    getAccessInfo(user.id),
   ])
 
   const profile = profileRes.data
@@ -55,6 +57,8 @@ export default async function DashboardPage() {
   const daysUntil = getDaysUntilExam(profile?.target_exam_date ?? null)
   const readiness = Math.min(Math.round(weekAccuracy * 0.7 + Math.min((streak?.current_streak ?? 0) * 2, 30)), 100)
   const readinessInfo = getReadinessLabel(readiness)
+
+  const isExpired = accessInfo.status === 'expired'
 
   const examModes = [
     { href: '/exam/quick', icon: Target, label: 'Quick Review', desc: 'Unlimited random questions', color: 'bg-indigo-500' },
@@ -168,19 +172,38 @@ export default async function DashboardPage() {
       {/* Review modes */}
       <h2 className="text-lg font-bold text-slate-900 mb-4">Start Reviewing</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
-        {examModes.map(({ href, icon: Icon, label, desc, color }) => (
-          <Link
-            key={href}
-            href={href}
-            className="card-hover bg-white border border-slate-100 rounded-2xl p-5 shadow-sm group"
-          >
-            <div className={`w-10 h-10 ${color} rounded-xl flex items-center justify-center mb-3`}>
-              <Icon className="w-5 h-5 text-white" />
-            </div>
-            <p className="font-semibold text-slate-900 text-sm">{label}</p>
-            <p className="text-xs text-slate-400 mt-0.5">{desc}</p>
-          </Link>
-        ))}
+        {examModes.map(({ href, icon: Icon, label, desc, color }) => {
+          if (isExpired) {
+            return (
+              <div
+                key={href}
+                className="relative bg-white border border-slate-100 rounded-2xl p-5 shadow-sm opacity-50 cursor-not-allowed select-none"
+              >
+                <div className={`w-10 h-10 ${color} rounded-xl flex items-center justify-center mb-3`}>
+                  <Icon className="w-5 h-5 text-white" />
+                </div>
+                <p className="font-semibold text-slate-900 text-sm">{label}</p>
+                <p className="text-xs text-slate-400 mt-0.5">{desc}</p>
+                <div className="absolute top-3 right-3">
+                  <Lock className="w-3.5 h-3.5 text-slate-400" />
+                </div>
+              </div>
+            )
+          }
+          return (
+            <Link
+              key={href}
+              href={href}
+              className="card-hover bg-white border border-slate-100 rounded-2xl p-5 shadow-sm group"
+            >
+              <div className={`w-10 h-10 ${color} rounded-xl flex items-center justify-center mb-3`}>
+                <Icon className="w-5 h-5 text-white" />
+              </div>
+              <p className="font-semibold text-slate-900 text-sm">{label}</p>
+              <p className="text-xs text-slate-400 mt-0.5">{desc}</p>
+            </Link>
+          )
+        })}
       </div>
 
       {/* Recent sessions */}
@@ -212,25 +235,6 @@ export default async function DashboardPage() {
           </div>
         </>
       )}
-
-      {/* Upgrade CTA for free users */}
-      <div className="mt-8 bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl p-6 text-white flex flex-col sm:flex-row items-center gap-4">
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1">
-            <Zap className="w-4 h-4 text-amber-400" />
-            <span className="font-bold">Upgrade to Premium</span>
-          </div>
-          <p className="text-indigo-100 text-sm">
-            No ads, unlimited review, full mock exams, and advanced analytics. Only ₱199/month.
-          </p>
-        </div>
-        <Link
-          href="/premium"
-          className="flex-shrink-0 px-6 py-3 bg-amber-400 hover:bg-amber-300 text-amber-900 font-bold rounded-xl transition-colors text-sm"
-        >
-          Upgrade Now
-        </Link>
-      </div>
     </div>
   )
 }

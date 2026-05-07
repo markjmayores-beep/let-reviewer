@@ -1,56 +1,29 @@
-'use client'
+import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
+import { getAccessInfo, isRouteAccessible } from '@/lib/subscription'
+import AppShell from './AppShell'
+import LockedScreen from '@/components/shared/LockedScreen'
+import { headers } from 'next/headers'
 
-import { useState, useEffect } from 'react'
-import Sidebar from '@/components/shared/Sidebar'
-import PWAInstallPrompt from '@/components/shared/PWAInstallPrompt'
-import { Menu } from 'lucide-react'
+export default async function AppLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const accessInfo = await getAccessInfo(user.id)
 
-  useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch(() => {})
-    }
-  }, [])
+  // Determine current pathname for access control
+  const headersList = await headers()
+  const pathname = headersList.get('x-pathname') ?? '/'
+
+  const canAccess = isRouteAccessible(pathname, accessInfo.status)
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden">
-      {/* Desktop sidebar */}
-      <div className="hidden lg:flex lg:flex-shrink-0">
-        <Sidebar />
-      </div>
-
-      {/* Mobile sidebar overlay */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setSidebarOpen(false)}
-          />
-          <div className="relative z-10">
-            <Sidebar onClose={() => setSidebarOpen(false)} />
-          </div>
-        </div>
-      )}
-
-      {/* Main content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Mobile header */}
-        <header className="lg:hidden flex items-center gap-3 px-4 py-3 bg-white border-b border-slate-200">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="p-2 rounded-lg hover:bg-slate-100"
-          >
-            <Menu className="w-5 h-5 text-slate-600" />
-          </button>
-          <span className="font-bold text-slate-900">LET Reviewer PH</span>
-        </header>
-
-        {/* Scrollable content area */}
-        <main className="flex-1 overflow-y-auto">{children}</main>
-      </div>
-      <PWAInstallPrompt />
-    </div>
+    <AppShell
+      accessStatus={accessInfo.status}
+      accessEndsAt={accessInfo.endsAt?.toISOString() ?? null}
+    >
+      {canAccess ? children : <LockedScreen />}
+    </AppShell>
   )
 }

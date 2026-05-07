@@ -66,7 +66,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ received: true })
     }
 
-    const intervalDays = subscription.plan === 'yearly' ? 365 : 30
+    const intervalDays = subscription.plan === 'weekly' ? 7 : 30
     const startsAt = new Date()
     const endsAt = new Date(startsAt.getTime() + intervalDays * 24 * 60 * 60 * 1000)
 
