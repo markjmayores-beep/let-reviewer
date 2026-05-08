@@ -26,7 +26,7 @@ export default function AppShell({ children, accessStatus, accessEndsAt }: AppSh
     <div className="flex h-screen bg-slate-50 overflow-hidden">
       {/* Desktop sidebar */}
       <div className="hidden lg:flex lg:flex-shrink-0">
-        <Sidebar />
+        <Sidebar accessStatus={accessStatus} accessEndsAt={accessEndsAt} />
       </div>
 
       {/* Mobile sidebar overlay */}
@@ -37,7 +37,7 @@ export default function AppShell({ children, accessStatus, accessEndsAt }: AppSh
             onClick={() => setSidebarOpen(false)}
           />
           <div className="relative z-10">
-            <Sidebar onClose={() => setSidebarOpen(false)} />
+            <Sidebar onClose={() => setSidebarOpen(false)} accessStatus={accessStatus} accessEndsAt={accessEndsAt} />
           </div>
         </div>
       )}
