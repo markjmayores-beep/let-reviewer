@@ -19,8 +19,6 @@ import {
   CheckCircle2,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
-import toast from 'react-hot-toast'
 import { cn } from '@/lib/utils'
 import type { AccessStatus } from '@/lib/subscription'
 
@@ -57,15 +55,12 @@ function formatExpiry(iso: string): string {
 
 export default function Sidebar({ onClose, accessStatus, accessEndsAt }: SidebarProps) {
   const pathname = usePathname()
-  const router = useRouter()
   const supabase = createClient()
   const isPremiumActive = accessStatus === 'active'
 
   async function handleSignOut() {
     await supabase.auth.signOut()
-    toast.success('Signed out')
-    router.push('/')
-    router.refresh()
+    window.location.href = '/'
   }
 
   return (
