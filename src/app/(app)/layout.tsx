@@ -5,6 +5,8 @@ import AppShell from './AppShell'
 import LockedScreen from '@/components/shared/LockedScreen'
 import { headers } from 'next/headers'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
