@@ -13,7 +13,29 @@ const TRIAL_HOURS = 24
 export const getAccessInfo = cache(async (userId: string): Promise<AccessInfo> => {
   const supabase = await createClient()
 
-  // Check for active subscription
+  // Check profile — is_premium flag (manually granted or legacy) always wins
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('is_premium, trial_started_at')
+    .eq('id', userId)
+    .maybeSingle()
+
+  if (profile?.is_premium) {
+    // Check for a subscription record to get the end date
+    const { data: sub } = await supabase
+      .from('subscriptions')
+      .select('ends_at')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .gt('ends_at', new Date().toISOString())
+      .order('ends_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+
+    return { status: 'active', endsAt: sub?.ends_at ? new Date(sub.ends_at) : null }
+  }
+
+  // Check for active subscription even if is_premium flag not set
   const { data: sub } = await supabase
     .from('subscriptions')
     .select('ends_at')
@@ -29,12 +51,6 @@ export const getAccessInfo = cache(async (userId: string): Promise<AccessInfo> =
   }
 
   // Check trial window
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('trial_started_at')
-    .eq('id', userId)
-    .maybeSingle()
-
   if (profile?.trial_started_at) {
     const trialEnd = new Date(
       new Date(profile.trial_started_at).getTime() + TRIAL_HOURS * 60 * 60 * 1000

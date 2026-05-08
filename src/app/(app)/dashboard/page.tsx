@@ -75,7 +75,7 @@ export default async function DashboardPage() {
       <div className="flex items-start justify-between mb-8 flex-wrap gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">
-            Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'afternoon' : 'evening'},{' '}
+            Good {(() => { const h = parseInt(new Date().toLocaleString('en-PH', { timeZone: 'Asia/Manila', hour: 'numeric', hour12: false })); return h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening' })()},{' '}
             {profile?.full_name?.split(' ')[0] ?? 'Teacher'} 👋
           </h1>
           <p className="text-slate-500 mt-1">

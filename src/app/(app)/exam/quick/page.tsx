@@ -2,6 +2,7 @@
 export const dynamic = 'force-dynamic'
 
 import { useState, useEffect, useCallback } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import QuestionCard from '@/components/exam/QuestionCard'
 import ExamResults from '@/components/exam/ExamResults'
@@ -11,6 +12,10 @@ import { Loader2, RefreshCw } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 export default function QuickReviewPage() {
+  const searchParams = useSearchParams()
+  const subjectParam = searchParams.get('subject')
+  const topicParam = searchParams.get('topic')
+
   const [questions, setQuestions] = useState<Question[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
@@ -27,16 +32,21 @@ export default function QuickReviewPage() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
 
-    const { data } = await supabase
+    let query = supabase
       .from('questions')
       .select('*')
       .eq('is_active', true)
-      .limit(100)
 
-    const shuffled = shuffleArray(data as Question[]).slice(0, 20)
+    if (topicParam) query = query.eq('topic', topicParam)
+    else if (subjectParam) query = query.eq('subject', subjectParam)
+
+    query = query.limit(100)
+
+    const { data } = await query
+    const shuffled = shuffleArray((data ?? []) as Question[]).slice(0, 20)
     setQuestions(shuffled)
     setLoading(false)
-  }, [supabase])
+  }, [supabase, subjectParam, topicParam])
 
   useEffect(() => { loadQuestions() }, [loadQuestions])
 
@@ -48,7 +58,6 @@ export default function QuickReviewPage() {
     const newAnswers = { ...answers, [question.id]: answer }
     setAnswers(newAnswers)
 
-    // Save attempt
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
       await supabase.from('attempts').insert({
@@ -63,7 +72,6 @@ export default function QuickReviewPage() {
 
   async function handleNext() {
     if (currentIndex + 1 >= questions.length) {
-      // Save session
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
         const correct = Object.entries(answers).filter(([qId, ans]) => {
@@ -74,6 +82,8 @@ export default function QuickReviewPage() {
         await supabase.from('exam_sessions').insert({
           user_id: user.id,
           mode: 'quick',
+          subject: subjectParam ?? undefined,
+          topic: topicParam ?? undefined,
           score: correct,
           total_questions: total,
           percentage: (correct / total) * 100,
@@ -83,8 +93,6 @@ export default function QuickReviewPage() {
           is_completed: true,
           completed_at: new Date().toISOString(),
         })
-
-        // Update streak
         await fetch('/api/streak', { method: 'POST' }).catch(() => {})
       }
       setSessionDone(true)
@@ -120,6 +128,25 @@ export default function QuickReviewPage() {
     )
   }
 
+  if (questions.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center px-4">
+          <p className="text-slate-700 font-semibold mb-1">No questions found</p>
+          <p className="text-slate-400 text-sm mb-4">
+            {topicParam ? `No questions yet for "${topicParam}"` : 'No questions available'}
+          </p>
+          <button
+            onClick={() => window.history.back()}
+            className="text-indigo-600 text-sm font-medium hover:underline"
+          >
+            Go back
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   if (sessionDone) {
     const correct = Object.entries(answers).filter(([qId, ans]) => {
       const q = questions.find((q) => q.id === qId)
@@ -141,10 +168,12 @@ export default function QuickReviewPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      {/* Progress bar */}
+      {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
-          <h1 className="text-sm font-semibold text-slate-500">Quick Review</h1>
+          <h1 className="text-sm font-semibold text-slate-500">
+            {topicParam ?? subjectParam ?? 'Quick Review'}
+          </h1>
           <span className="text-sm text-slate-400">{currentIndex + 1} / {questions.length}</span>
         </div>
         <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
