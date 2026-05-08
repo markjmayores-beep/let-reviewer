@@ -1,7 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
-import { BookOpen, ChevronRight } from 'lucide-react'
+import { BookOpen } from 'lucide-react'
 import { SUBJECTS } from '@/types'
 import { getSubjectColor } from '@/lib/utils'
 export const dynamic = 'force-dynamic'
@@ -15,7 +14,7 @@ export default async function ReviewPage() {
   const examType = (profile?.exam_type ?? 'elementary') as 'elementary' | 'secondary'
   const subjects = SUBJECTS[examType]
 
-  // Get topic counts and accuracy
+  // Get topic accuracy from last 30 days
   const { data: attempts } = await supabase
     .from('attempts')
     .select('is_correct, questions(subject, topic)')
@@ -37,26 +36,25 @@ export default async function ReviewPage() {
           <BookOpen className="w-5 h-5 text-indigo-600" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Review by Subject</h1>
-          <p className="text-slate-500 text-sm capitalize">{examType} LET</p>
+          <h1 className="text-2xl font-bold text-slate-900">Topic Mastery</h1>
+          <p className="text-slate-500 text-sm capitalize">{examType} LET · last 30 days</p>
         </div>
       </div>
 
       <div className="space-y-8">
         {Object.entries(subjects).map(([subject, topics]) => (
           <div key={subject}>
-            <h2 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+            <h2 className="font-bold text-slate-900 mb-3">
               <span className={`text-xs font-semibold px-2 py-1 rounded ${getSubjectColor(subject)}`}>
                 {subject}
               </span>
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {(topics as readonly string[]).map((topic) => {
-                // Find the best subject match
                 const keys = Object.keys(topicStats).filter((k) => k.includes(topic))
-                let stat = null
+                let stat: { total: number; correct: number } | null = null
                 for (const k of keys) {
-                  if (!stat) stat = topicStats[k]
+                  if (!stat) stat = { ...topicStats[k] }
                   else {
                     stat.total += topicStats[k].total
                     stat.correct += topicStats[k].correct
@@ -65,10 +63,9 @@ export default async function ReviewPage() {
                 const accuracy = stat && stat.total > 0 ? (stat.correct / stat.total) * 100 : null
 
                 return (
-                  <Link
+                  <div
                     key={topic}
-                    href={`/exam/quick?subject=${encodeURIComponent(subject)}&topic=${encodeURIComponent(topic)}`}
-                    className="card-hover flex items-center gap-4 bg-white border border-slate-100 rounded-xl p-4 shadow-sm group"
+                    className="flex items-center gap-4 bg-white border border-slate-100 rounded-xl p-4 shadow-sm"
                   >
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-slate-900 text-sm truncate">{topic}</p>
@@ -80,14 +77,20 @@ export default async function ReviewPage() {
                               style={{ width: `${accuracy}%` }}
                             />
                           </div>
-                          <span className="text-xs text-slate-500 font-medium">{Math.round(accuracy)}%</span>
+                          <span className={`text-xs font-semibold tabular-nums ${accuracy >= 75 ? 'text-emerald-600' : accuracy >= 60 ? 'text-amber-600' : 'text-red-500'}`}>
+                            {Math.round(accuracy)}%
+                          </span>
                         </div>
                       ) : (
                         <p className="text-xs text-slate-400 mt-1">Not started</p>
                       )}
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-colors flex-shrink-0" />
-                  </Link>
+                    {stat && (
+                      <span className="text-xs text-slate-400 flex-shrink-0">
+                        {stat.correct}/{stat.total}
+                      </span>
+                    )}
+                  </div>
                 )
               })}
             </div>
